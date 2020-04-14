@@ -27,5 +27,11 @@ disjunct$TYP <- disjunct$YEAR
 sin_labs <- paste(seq(1900,2010, by=2), seq(1902,2012, by=2),sep="-") #labs is not a good choice for a new character name because it is also the name of the function "labels". Better: sin_labs. 
 disjunct$TYP <- cut(disjunct$TYP, breaks = seq(1900,2012, by = 2), labels = sin_labs, include.lowest = T)
 
+TestTestTest
+
+testInheritedMethods(
+  tetttststdtsdttest
+)
+
 
 

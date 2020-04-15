@@ -36,19 +36,26 @@ disjunct$TOTAL_CITES<-apply(disjunct[,c(5:31)], 1, sum)
 disjunct$ACCOUNTED<-disjunct$TOTAL_CITES-disjunct$UNACC #makes perfectly sense, but one could also calculate it in positive way
 disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100 
 
-
+##Appendix
 ##plotting the Unaccounted-rate
-p <- ggplot(disjunct, aes(factor(YEAR), UNACC_RATE)) + #why year with the factor function?
-        stat_boxplot(outlier.size = NA)
-        p + geom_boxplot(outlier.size = NA) + 
-        theme(plot.title=element_text(face="bold", size=14)) + 
-        labs(x = "\nYear", y = "Percentage\n") + 
-        scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) +
-        theme_bw()  + 
-        stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
+p <- ggplot(disjunct, aes(factor(YEAR), UNACC_RATE)) + stat_boxplot(outlier.size = NA) #why year with the factor function?
+
+p + geom_boxplot(outlier.size = NA) + 
+    theme(plot.title=element_text(face="bold", size=14)) + 
+    labs(x = "\nYear", y = "Percentage\n") + 
+    scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #again (like in line 19)
+    theme_bw()  +  #white background
+    stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
 
 
-
+#######Standardization. Compute for each article the percentage of each discipline relative to the number of citations accounted for
+#######Reorder the dataframe for the sake of clarity
+##for the definition of a base year (1900)
+colnames(disjunct)
+disjunct1 <- disjunct[,c(1,2,4,5:8,10:24,26:31,36,33,34)] #DK,OTHER,NR,UNACC_RATE,TOTAL_CITES are excluded
+colnames(disjunct1)
+head(disjunct1,1)
+dim(disjunct1) 
 
 
 

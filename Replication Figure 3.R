@@ -25,13 +25,34 @@ p + geom_boxplot(outlier.size = NA) + #aren't the outliers still present in the 
 ##creating a new variable: "two year period" 
 disjunct$TYP <- disjunct$YEAR
 sin_labs <- paste(seq(1900,2010, by=2), seq(1902,2012, by=2),sep="-") #labs is not a good choice for a new character name because it is also the name of the function "labels". Better: sin_labs. 
-disjunct$TYP <- cut(disjunct$TYP, breaks = seq(1900,2012, by = 2), labels = sin_labs, include.lowest = T)
+disjunct$TYP <- cut(disjunct$TYP, breaks = seq(1900,2012, by = 2), labels = sin_labs, include.lowest = T) #why is there a seq interval of 2?
 
-TestTestTest
 
-testInheritedMethods(
-  tetttststdtsdttest
-)
+##unaccounted citations of fields that are not relevant for figure 3 (DK + OTHERS)
+#here is not clear. what DK means
+colnames(disjunct)
+disjunct$UNACC<-apply(disjunct[,c(9,25)],1,sum) #why do they choose this values of c()?
+disjunct$TOTAL_CITES<-apply(disjunct[,c(5:31)], 1, sum) 
+disjunct$ACCOUNTED<-disjunct$TOTAL_CITES-disjunct$UNACC #makes perfectly sense, but one could also calculate it in positive way
+disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100 
+
+
+##plotting the Unaccounted-rate
+p <- ggplot(disjunct, aes(factor(YEAR), UNACC_RATE)) + #why year with the factor function?
+        stat_boxplot(outlier.size = NA)
+        p + geom_boxplot(outlier.size = NA) + 
+        theme(plot.title=element_text(face="bold", size=14)) + 
+        labs(x = "\nYear", y = "Percentage\n") + 
+        scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) +
+        theme_bw()  + 
+        stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
+
+
+
+
+
+
+
 
 
 

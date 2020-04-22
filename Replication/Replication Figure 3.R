@@ -27,7 +27,6 @@ disjunct$TYP <- disjunct$YEAR
 sin_labs <- paste(seq(1900,2010, by=2), seq(1902,2012, by=2),sep="-") #labs is not a good choice for a new character name because it is also the name of the function "labels". Better: sin_labs. 
 disjunct$TYP <- cut(disjunct$TYP, breaks = seq(1900,2012, by = 2), labels = sin_labs, include.lowest = T) #why is there a seq interval of 2?
 
-
 ##unaccounted citations of fields that are not relevant for figure 3 (DK + OTHERS)
 #here is not clear. what DK means
 colnames(disjunct)
@@ -41,11 +40,11 @@ disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100
 p <- ggplot(disjunct, aes(factor(YEAR), UNACC_RATE)) + stat_boxplot(outlier.size = NA) #why year with the factor function?
 
 p + geom_boxplot(outlier.size = NA) + 
-    theme(plot.title=element_text(face="bold", size=14)) + 
-    labs(x = "\nYear", y = "Percentage\n") + 
-    scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #again (like in line 19)
-    theme_bw()  +  #white background
-    stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
+  theme(plot.title=element_text(face="bold", size=14)) + 
+  labs(x = "\nYear", y = "Percentage\n") + 
+  scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #again (like in line 19)
+  theme_bw()  +  #white background
+  stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
 
 
 #######Standardization. Compute for each article the percentage of each discipline relative to the number of citations accounted for
@@ -100,10 +99,5 @@ m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
 q<-ggplot(m_disjunct_percent, aes(x=PERIOD,  y=FREQUENCY, group=DISCIPLINE))
 q + geom_smooth(aes(group=DISCIPLINE), se=F, span=.4, linetype=m_disjunct_percent$linetype, color="black") +geom_point(aes(shape=DISCIPLINE, size = 3), alpha=7/10)+ ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nPeriod", y = "% of citations\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + theme(panel.background = element_rect(fill='white', colour='grey')) + scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) +theme(legend.position="none") 
-
-
-
-
-
 
 

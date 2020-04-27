@@ -101,7 +101,19 @@ m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twoda
 m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
 q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
-q + geom_smooth(aes(group = DISCIPLINE), se = FALSE, span = .4, linetype = m_disjunct_percent$linetype, color = "black", show.legend = TRUE) + geom_point(aes(shape = DISCIPLINE, size = .5), alpha = 7/10) + ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = -60, hjust = 2)) + theme(legend.title = element_text(face = "bold", color = "Black", size = 20)) + labs(x = "\nPeriod", y = "% of citations\n")+  theme(plot.title = element_text(family="Arial", face="bold", size=14)) + theme(panel.background = element_rect(fill='white', colour='grey')) + scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + theme(legend.position="none") 
+q + geom_smooth(aes(group = DISCIPLINE), se = FALSE, span = .4, linetype = m_disjunct_percent$linetype, color = "black", show.legend = TRUE) + 
+  geom_point(aes(shape = DISCIPLINE, size = .5), alpha = 7/10) + 
+  ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + 
+  theme(axis.text.x = element_text(angle = -60, hjust = 2)) + 
+  labs(x = "\nPeriod", y = "% of citations\n")+  
+  theme(plot.title = element_text(family="Arial", face="bold", size=14)) + 
+  theme(panel.background = element_rect(fill='white', colour='grey')) + 
+  scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + 
+  theme(legend.position="none") 
 
+# to generate the original figure like in the paper, we adjusted the code:
+# - Appendix deleted
+# - Size from geom_point modified from size = 3 to size = 0.5
+# - regarding theme axis: from angel = +60 to angel = -60 and from hjust = 1 to hjust = 2
 
 

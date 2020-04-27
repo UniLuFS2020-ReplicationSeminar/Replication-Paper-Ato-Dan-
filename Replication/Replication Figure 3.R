@@ -1,14 +1,14 @@
-library(ggplot2)
-library(tidyverse)
-install.packages("rio")
+library("ggplot2")
+library("tidyverse")
 library("rio")
+library("reshape")
 
 ####Figure 3
 ##who do economists cite?
 here::here("Data")
 list.files()
 disjunct <- rio::import("Data/Base5j_Disj_Redux.csv")
-view(disjunct)
+View(disjunct)
 
 ##dimensions of the data set:
 dim(disjunct) 
@@ -37,7 +37,7 @@ disjunct$UNACC<-apply(disjunct[,c(9,25)],1,sum) #they indicate all rows in a vec
 disjunct$TOTAL_CITES<-apply(disjunct[,c(5:31)], 1, sum) 
 disjunct$ACCOUNTED <- disjunct$TOTAL_CITES-disjunct$UNACC #makes perfect sense, but one could also calculate it in positive way
 disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100 #what exactly do we calculate and for what reason?
-view(disjunct)
+View(disjunct)
 
 ##Appendix
 ##plotting the Unaccounted-rate
@@ -78,12 +78,12 @@ disjunct_percent1<-disjunct_percent[26:56,c(1:6,9,12,13)]
 m_disjunct_percent<-melt(disjunct_percent1, id="Group.1")
 colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY")
 
-p<-ggplot(m_disjunct_percent, aes(PERIOD,  FREQUENCY))
-p +geom_bar(stat="identity") + facet_grid(DISCIPLINE~., scale='free_y') + theme(legend.position="none")  + ggtitle("Who do Economists Cite?\n Most cited disciplines cited in Five top journals (1900-2012)\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nYear", y = "% of citations to this discipline\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14))  + theme(strip.text.y = element_text(size = 5))+ theme(panel.background = element_rect(fill='white', colour='grey'))
+p <- ggplot(m_disjunct_percent, aes(PERIOD,  FREQUENCY))
+p + geom_bar(stat="identity") + facet_grid(DISCIPLINE~., scale='free_y') + theme(legend.position="none")  + ggtitle("Who do Economists Cite?\n Most cited disciplines cited in Five top journals (1900-2012)\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nYear", y = "% of citations to this discipline\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14))  + theme(strip.text.y = element_text(size = 5))+ theme(panel.background = element_rect(fill='white', colour='grey'))
 
 #Without economics (1950:2012)
 colnames(disjunct_percent)
-disjunct_percent2<-disjunct_percent[26:56,c(1,3:6,9,11,12,13,16)]
+disjunct_percent2 <- disjunct_percent[26:56,c(1,3:6,9,11,12,13,16)]
 
 m_disjunct_percent<-melt(disjunct_percent2, id="Group.1")
 m_disjunct_percent$linetype<-as.character(m_disjunct_percent$variable)
@@ -100,8 +100,8 @@ m_disjunct_percent$linetype[m_disjunct_percent$linetype == "LAW"]<-"1F"
 m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twodash"
 m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
-q<-ggplot(m_disjunct_percent, aes(x=PERIOD,  y=FREQUENCY, group=DISCIPLINE))
-q + geom_smooth(aes(group=DISCIPLINE), se=F, span=.4, linetype=m_disjunct_percent$linetype, color="black") +geom_point(aes(shape=DISCIPLINE, size = 3), alpha=7/10)+ ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nPeriod", y = "% of citations\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + theme(panel.background = element_rect(fill='white', colour='grey')) + scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) +theme(legend.position="none") 
+q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
+q + geom_smooth(aes(group = DISCIPLINE), se = FALSE, span = .4, linetype = m_disjunct_percent$linetype, color = "black", show.legend = TRUE) + geom_point(aes(shape = DISCIPLINE, size = .5), alpha = 7/10) + ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = -60, hjust = 2)) + theme(legend.title = element_text(face = "bold", color = "Black", size = 20)) + labs(x = "\nPeriod", y = "% of citations\n")+  theme(plot.title = element_text(family="Arial", face="bold", size=14)) + theme(panel.background = element_rect(fill='white', colour='grey')) + scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + theme(legend.position="none") 
 
 
 

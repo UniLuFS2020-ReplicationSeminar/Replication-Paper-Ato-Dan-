@@ -26,18 +26,19 @@ crossrefs2<-cbind(crossrefs[,c(1:2)],sweep(crossrefs[,3:9],1,crossrefs[,11],`/`)
 view(crossrefs2)
 
 #Reshape
-m_crossrefs <- melt(crossrefs2, id=c("CITING", "YEAR"))
+m_crossrefs <- melt(crossrefs2, id=c("CITING", "YEAR")) #does not change much, because it is just a transformation 
 colnames(m_crossrefs)<-c("CITING", "YEAR", "CITED", "VALUE")
 
+view(m_crossrefs)
 
 ################################## Figure 4: Citations received from the 6 other journals (Figure 4)
 x=seq(1950,2010, by=2)
 y=seq(1951,2011, by=2)
 
-file<-NULL
+file<-NULL 
 
 for (i in 1:length(x)){
-  TAB<-m_crossrefs[m_crossrefs$YEAR %in% c(x[i]:y[i]),] #dim(TAB)	
+  TAB <- m_crossrefs[m_crossrefs$YEAR %in% c(x[i]:y[i]),] #dim(TAB)	
   head(TAB)
   mat<-xtabs(VALUE~CITING+CITED, data=TAB)#Present data as a matrix
   mat<-mat[,rownames(mat)]
@@ -68,7 +69,13 @@ noself2$linetype[noself2$linetype == "RES"]<-"12345678"
 
 
 p<-ggplot(noself2, aes(x=PERIOD, y=VALUE, group=CITED))
-p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype=noself2$linetype, color="black") + ggtitle("\n") + scale_shape_manual(values=c(1:7)) + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nPeriod", y = "% of citations received\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + theme(panel.background = element_rect(fill='white', colour='grey')) +geom_point(aes(shape=CITED), alpha=7/10)
-
-
+p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype=noself2$linetype, color="black") + 
+  ggtitle("\n") + 
+  scale_shape_manual(values=c(1:7)) + 
+  theme(axis.text.x = element_text(size = 6)) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
+  labs(x = "\nPeriod", y = "% of citations received\n")+  
+  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + 
+  theme(panel.background = element_rect(fill='white', colour='grey')) + 
+  geom_point(aes(shape=CITED), alpha=7/10)
 

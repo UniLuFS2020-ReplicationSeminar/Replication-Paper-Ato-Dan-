@@ -2,7 +2,9 @@
 title: "Replication Report"
 author: "Ato und Dan"
 date: "5/15/2020"
-output: html_document
+output: 
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -35,6 +37,28 @@ Our replication paper only contains descriptive statistics. For this reason, we 
 
 Bad Balance between descriptive and normative claims. What is the overall purpose of the paper? Do they simply describe the shifting relationships and the general relationship of the 2 disciplines and how does that fit together with their normative claim that economists see themselves as a superior class. 
 
+
+## **Tables & Figures**
+In this section we present the replicated tables and figures. This includes figure 2, figure 3, figure 4.
+
+**Figure 1**
+
+```{r echo=TRUE}
+####Figure 2
+##Import data set
+getwd()
+list.files()
+here::here("Data/Org-Affiliations.csv")
+orgs <- rm(list=ls())
+orgs <- rio::import("Data/Org-Affiliations.csv")
+
+props.org <- as.data.frame(prop.table(table(orgs$RANK, orgs$ORGANIZATION),2)*100)
+colnames(props.org) <- c("Rank", "Organization", "Freq")
+props.org$Rank<-factor(props.org$Rank, levels = c("Top 5","Top 6-10","Top 11-20","Top 21-50","Top 51-100","Not ranked"))
+
+p<-ggplot(props.org, aes(x=Rank, y=Freq, fill=Organization))+scale_fill_grey()
+p+geom_bar(position="dodge", stat="identity")+ xlab("\n\nRanking\n")+ ylab("Members of the Councils (%)\n\n")+theme_bw() + theme(axis.text.x  = element_text(size=13), legend.text = element_text(size = 12), legend.title = element_text(size=12))
+```
 
 ## R Markdown
 

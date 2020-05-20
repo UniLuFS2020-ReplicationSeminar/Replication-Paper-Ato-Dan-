@@ -1,0 +1,256 @@
+---
+title: "Replication Report"
+author: "Ato und Dan"
+date: "5/15/2020"
+output: 
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup,include = FALSE}
+library("ggplot2")
+library("tidyverse")
+library("rio")
+library("reshape")
+```
+
+# **Replication Report**
+
+**Word Counter: X** 
+
+## **Introduction**
+The overall transparency of the paper was mediocre. They provided an extensive readme file with a proper explanation of the script about all tables and figures. Moreover, we appreciated their comments within the scripts allowing an exact understanding of the methods and procedures used to visualize the data.  
+However, we were not able to reproduce all tabes and figures due to missing scripts and/or datasets. This was the case for table 1, table 2, figure 1 and figure 5. The ReadMe.txt file contained URLs to downaload the datasets for figure 1 and figure 5. Nevertheless, the [URL of figure 1](https://www.asanet.org/research/stats/social_science_degrees_by_gender_since_1966.cfm) was invalid, probably due to a major update of the website. Providing URLs is definitely not a good choice to ensure the long-term replicapiblity of a scientific paper as they get invalid from time to time due to website updates. The [URL of figure 5](https://www.bls.gov/oes/tables.htm) was still valid but the presented dataset did not clearly indicate the categorization of the variables (e.g. Did the authors include the category "architects" to the category of "engineers"?). We also reached out to the authors to get the missing scripts and datasets, without any success.  
+Apart from that, the authors comments were somtimes misleading so that we could not to assign specific sections of the script to the corresponding tables or figures. E.g. There was an appendix after figure 3 that was already part of figure 4. This led to intial confusion as this additional junks of code substantially changed the looks and results of figure 3.
+
+
+## **Description of the data**
+Our replication paper only contains descriptive statistics. For this reason, we mainly focus on the applied method and the operationalization of the variables.  
+
+- Criticize aggressive claims
+1) Insularity: Sufficient evidence with no interidisciplinary benefit and citing others
+2) Hierarchy: Not a good measure to proove superiority of economists
+3) Other differentiators: Good indicator for their main thesis -> evidence for selfishness, more income, and higher, self-confidence 
+4) Reorientation to business and finance not a good indicator for their main thesis
+- Methods: Only descriptives -> normative claims 
+
+Bad Balance between descriptive and normative claims. What is the overall purpose of the paper? Do they simply describe the shifting relationships and the general relationship of the 2 disciplines and how does that fit together with their normative claim that economists see themselves as a superior class. 
+
+
+## **Tables & Figures**
+In this section we present the replicated tables and figures. This includes figure 2, figure 3, figure 4.
+
+**Figure 2**
+
+```{r echo=FALSE, warning = FALSE, message=FALSE, results = FALSE}
+####Figure 2
+##Import data set
+here::here("Data/Org-Affiliations.csv")
+orgs <- rm(list=ls())
+orgs <- rio::import("Data/Org-Affiliations.csv")
+
+props.org <- as.data.frame(prop.table(table(orgs$RANK, orgs$ORGANIZATION),2)*100)
+colnames(props.org) <- c("Rank", "Organization", "Freq")
+props.org$Rank<-factor(props.org$Rank, levels = c("Top 5","Top 6-10","Top 11-20","Top 21-50","Top 51-100","Not ranked"))
+
+p<-ggplot(props.org, aes(x=Rank, y=Freq, fill=Organization))+scale_fill_grey()
+p+geom_bar(position="dodge", stat="identity")+ xlab("\n\nRanking\n")+ ylab("Members of the Councils (%)\n\n")+theme_bw() + theme(axis.text.x  = element_text(size=13), legend.text = element_text(size = 12), legend.title = element_text(size=12))
+```
+
+
+**Figure 3**
+
+```{r echo=FALSE, warning = FALSE, message=FALSE, results = FALSE}
+####Figure 3
+##Import data set
+####Figure 3
+##who do economists cite?
+here::here("Data")
+disjunct <- rio::import("Data/Base5j_Disj_Redux.csv")
+
+##dimensions of the data set:
+dim(disjunct) 
+table(disjunct$JOURNAL, disjunct$YEAR)
+
+##plotting the year and the number of references in percentage:
+p <- ggplot(disjunct, aes(factor(YEAR), NUMB_REF))
+p + geom_boxplot(outlier.size = NA) + #aren't the outliers still present in the plot?? Function for removing outliers isnt correct anymore 
+  ggtitle("Number of references in 5 Top Economics Journals\nAER, QJE, JPE, RES, ECTRCA\n") + 
+  theme(plot.title=element_text(face="bold", size=14))+ 
+  labs(x = "\nYear", y = "Percentage\n")+ #why is the description in the quotation marks not equal to the description of the layers in the plot?
+  scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #the labels are going til 2010, but the data reaches up to 2012
+  ylim(0,100)+
+  theme_bw() + #white background
+  stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="brown4") #fun.y is an outdated function; shows the median trend in the plot
+
+##creating a new variable: "two year period" 
+disjunct$TYP <- disjunct$YEAR
+TYP_labs <- paste(seq(1900,2010, by=2), seq(1902,2012, by=2),sep="-") #labs is not a good choice for a new character name because it is also the name of the function "labels". Better: TYP_labs. 
+disjunct$TYP <- cut(disjunct$TYP, breaks = seq(1900,2012, by = 2), labels = TYP_labs, include.lowest = T) #There is a seq intercal of two, because the plot in the paper visualizes two year period
+
+##unaccounted citations of fields that are not relevant for figure 3 (DK + OTHERS)
+#here is not clear. what DK means
+colnames(disjunct)
+disjunct$UNACC<-apply(disjunct[,c(9,25)],1,sum) #they indicate all rows in a vector of the columns "OTHER" and "DK" because they will not be accounted
+disjunct$TOTAL_CITES<-apply(disjunct[,c(5:31)], 1, sum) 
+disjunct$ACCOUNTED <- disjunct$TOTAL_CITES-disjunct$UNACC #makes perfect sense, but one could also calculate it in positive way
+disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100 #what exactly do we calculate and for what reason?
+
+##Appendix
+##plotting the Unaccounted-rate
+p <- ggplot(disjunct, aes(factor(YEAR), UNACC_RATE)) + stat_boxplot(outlier.size = NA) #why year with the factor function?
+
+p + geom_boxplot(outlier.size = NA) + 
+  theme(plot.title=element_text(face="bold", size=14)) + 
+  labs(x = "\nYear", y = "Percentage\n") + 
+  scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #again like above
+  theme_bw()  +  #white background
+  stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
+
+
+#######Standardization. Compute for each article the percentage of each discipline relative to the number of citations accounted for
+#######Reorder the dataframe for the sake of clarity
+##for the definition of a base year (1900)
+colnames(disjunct)
+disjunct1 <- disjunct[,c(1,2,4,5:8,10:24,26:31,36,33,34)] #DK,OTHER,NR,UNACC_RATE,TOTAL_CITES are excluded
+colnames(disjunct1)
+head(disjunct1,1)
+dim(disjunct1) 
+
+######Percentage of each discipline (relative to the number of articles *accounted for*), per discipline
+#First, aggregate by a period of 2 years
+colnames(disjunct1)
+disjunct1_agg <- aggregate(disjunct1[,c(4:29)], by = list(disjunct1$TYP, disjunct1$JOURNAL), FUN=sum) #aggregating the study programmes (and ACCOUNTED) by listing through two year period variable and Journal. Unclear why ACCOUNTED is included here
+
+dim(disjunct1_agg) # head(disjunct1_agg)
+disjunct_percent<-cbind(PERIOD=disjunct1_agg[,1], sweep(disjunct1_agg[,3:28],1,disjunct1_agg[,28],`/`)*100) #why didnt they exclude ACCOUNTED in the previous definition?
+
+dim(disjunct_percent)
+disjunct_percent<-aggregate(disjunct_percent[,c(2:27)], by=list(disjunct_percent$PERIOD), FUN=mean)
+
+######## Graphs
+#With economics (1950:2012)
+disjunct_percent1<-disjunct_percent[26:56,c(1:6,9,12,13)]
+m_disjunct_percent<-melt(disjunct_percent1, id="Group.1")
+colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY")
+
+p <- ggplot(m_disjunct_percent, aes(PERIOD,  FREQUENCY))
+p + geom_bar(stat="identity") + facet_grid(DISCIPLINE~., scale='free_y') + theme(legend.position="none")  + ggtitle("Who do Economists Cite?\n Most cited disciplines cited in Five top journals (1900-2012)\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nYear", y = "% of citations to this discipline\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14))  + theme(strip.text.y = element_text(size = 5))+ theme(panel.background = element_rect(fill='white', colour='grey'))
+
+#Without economics (1950:2012)
+colnames(disjunct_percent)
+disjunct_percent2 <- disjunct_percent[26:56,c(1,3:6,9,11,12,13,16)]
+
+m_disjunct_percent<-melt(disjunct_percent2, id="Group.1")
+m_disjunct_percent$linetype<-as.character(m_disjunct_percent$variable)
+colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY", "linetype")
+head(m_disjunct_percent)
+tail(m_disjunct_percent,200)
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "FINANCE"]<-"solid"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "MATHEMATICS"]<-"dotdash"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "STATISTICS"]<-"12345678"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "SOCIOLOGY"]<-"dotted"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "BUSINESS"]<-"longdash"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "POLSCIENCE"]<-"F1"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "LAW"]<-"1F"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twodash"
+m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
+
+q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
+q + geom_smooth(aes(group = DISCIPLINE), se = FALSE, span = .4, linetype = m_disjunct_percent$linetype, color = "black", show.legend = TRUE) + 
+  geom_point(aes(shape = DISCIPLINE, size = .5), alpha = 7/10) + 
+  ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + 
+  theme(axis.text.x = element_text(angle = -60)) + 
+  labs(x = "\nPeriod", y = "% of citations\n")+  
+  theme(plot.title = element_text(family="Arial", face="bold", size=14)) + 
+  theme(panel.background = element_rect(fill='white', colour='grey')) + 
+  scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + 
+  theme(legend.position="none") 
+
+# to generate the original figure like in the paper, we adjusted the code:
+# - Appendix deleted
+# - Size from geom_point modified from size = 3 to size = 0.5
+# - regarding theme axis: from angel = +60 to angel = -60 and from hjust = 1 to hjust = 2
+
+```
+
+**Figure 4**
+
+```{r echo=FALSE, warning = FALSE, message=FALSE, results = FALSE}
+##########################################################     Citations between Econ Journals (appendix) ##################################################
+rm(list=ls())
+crossrefs <- rio::import("Data/crossrefs.csv")
+dim(crossrefs)
+
+#Number of references cited in a given journal, over time
+p <- ggplot(crossrefs, aes(x=YEAR, y=TOTAL_REFS, colour=CITING))
+p + 
+  ggtitle("Number of references in 7 Economics Journals (1900-2012)\n") +
+  geom_smooth(se = FALSE, span=.3)  + 
+  scale_x_continuous(breaks=seq(1900,2010,10)) +
+  theme_bw() + ylab("Number of references\n") + 
+  xlab("\nYear")
+
+colnames(crossrefs)
+
+# Normalize by year/ journal
+crossrefs2<-cbind(crossrefs[,c(1:2)],sweep(crossrefs[,3:9],1,crossrefs[,11],`/`)*100) # definition of new variable crossrefs2: # all vectors including all rows of journals / the vector of total cites 
+view(crossrefs2)
+
+#Reshape
+m_crossrefs <- melt(crossrefs2, id=c("CITING", "YEAR")) #does not change much, because it is just a transformation 
+colnames(m_crossrefs)<-c("CITING", "YEAR", "CITED", "VALUE")
+
+view(m_crossrefs)
+
+################################## Figure 4: Citations received from the 6 other journals (Figure 4)
+x=seq(1950,2010, by=2)
+y=seq(1951,2011, by=2)
+
+file<-NULL 
+
+for (i in 1:length(x)){
+  TAB <- m_crossrefs[m_crossrefs$YEAR %in% c(x[i]:y[i]),] #dim(TAB)	
+  head(TAB)
+  mat<-xtabs(VALUE~CITING+CITED, data=TAB)#Present data as a matrix
+  mat<-mat[,rownames(mat)]
+  diag(mat)<-0 # Remove self-citations
+  cited<-addmargins(mat,1)[8,] #Calculate sum citations received 
+  citing<-addmargins(mat,2)[,8] #Calculate sum citations made
+  mat<-sweep(mat[,1:7],1,citing,`/`)*100
+  page<-cbind(melt(mat), YEAR=rep(paste(x[i],"-",y[i], sep=""), nrow(melt(mat))))
+  file<-rbind(file, page)
+}
+#Remove self-citations	
+noself<-file[file$CITING != file$CITED,]
+head(noself)
+noself2<-aggregate(noself$value, by=list(noself$YEAR, noself$CITED), FUN=mean)
+colnames(noself2)<-c("PERIOD", "CITED", "VALUE")
+head(noself2, 10)
+noself2$linetype<-as.character(noself2$CITED)
+head(noself2)
+tail(noself2, 200)
+
+noself2$linetype[noself2$linetype == "AER"]<-"solid"
+noself2$linetype[noself2$linetype == "ECTRA"]<-"dashed"
+noself2$linetype[noself2$linetype == "EJ"]<-"dotted"
+noself2$linetype[noself2$linetype == "JFIN"]<-"dotdash"
+noself2$linetype[noself2$linetype == "JPE"]<-"longdash"
+noself2$linetype[noself2$linetype == "QJE"]<-"F1"
+noself2$linetype[noself2$linetype == "RES"]<-"12345678"
+
+
+p<-ggplot(noself2, aes(x=PERIOD, y=VALUE, group=CITED))
+p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype=noself2$linetype, color="black") + 
+  ggtitle("\n") + 
+  scale_shape_manual(values=c(1:7)) + 
+  theme(axis.text.x = element_text(size = 6)) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
+  labs(x = "\nPeriod", y = "% of citations received\n")+  
+  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + 
+  theme(panel.background = element_rect(fill='white', colour='grey')) + 
+  geom_point(aes(shape=CITED), alpha=7/10)
+```
+
+
+

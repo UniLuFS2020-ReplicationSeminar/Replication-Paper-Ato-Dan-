@@ -113,7 +113,7 @@ q + geom_smooth(aes(group = DISCIPLINE, color = DISCIPLINE), se = FALSE, span = 
   labs(x = "\nPeriod", y = "% of citations\n") +  
   theme(plot.title = element_text(family="Arial", face="bold", size = 14)) + 
   scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + 
-  theme(legend.position="none")
+  theme(legend.position="none") 
 
 
 

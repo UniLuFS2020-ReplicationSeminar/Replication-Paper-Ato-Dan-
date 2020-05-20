@@ -1,3 +1,5 @@
+
+
 library("ggplot2")
 library("tidyverse")
 library("rio")
@@ -101,25 +103,13 @@ m_disjunct_percent$linetype[m_disjunct_percent$linetype == "LAW"]<-"1F"
 m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twodash"
 m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
-q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
-q + geom_smooth(aes(group = DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4, linetype = m_disjunct_percent$linetype, show.legend = TRUE) + 
-  scale_colour_brewer(palette = "Set2") +
-  theme(panel.background = element_rect(fill='white')) + 
-  theme_classic() +
-  geom_point(aes(size = .1, shape = DISCIPLINE, color = DISCIPLINE), alpha = 5/10) + 
-  ggtitle("\n") + theme(axis.text.x = element_text(size = 8)) + 
-  theme(axis.text.x = element_text(angle = -60, face = "bold", size = 7, hjust = -0.1)) + 
-  theme(axis.text.y = element_text(face = "bold", size = 7)) + 
-  labs(x = "\nPeriod", y = "% of citations\n") +  
-  theme(plot.title = element_text(family="Arial", face="bold", size = 14)) + 
+q<-ggplot(m_disjunct_percent, aes(x=PERIOD,  y=FREQUENCY, group=DISCIPLINE))
+q + geom_smooth(aes(group=DISCIPLINE), se=F, span=.4, linetype=m_disjunct_percent$linetype, color="black") + 
+  geom_point(aes(shape=DISCIPLINE, size = 3), alpha=7/10)+ 
+  ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
+  labs(x = "\nPeriod", y = "% of citations\n") + 
+  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + 
+  theme(panel.background = element_rect(fill='white', colour='grey')) + 
   scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + 
-  theme(legend.position="none") 
-
-
-
-# to generate the original figure like in the paper, we adjusted the code:
-# - Appendix deleted
-# - Size from geom_point modified from size = 3 to size = 0.5
-# - regarding theme axis: from angel = +60 to angel = -60 and from hjust = 1 to hjust = 2
-
-
+  theme(legend.position="none")

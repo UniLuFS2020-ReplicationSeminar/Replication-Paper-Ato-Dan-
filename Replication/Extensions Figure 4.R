@@ -71,19 +71,15 @@ noself2$linetype[noself2$linetype == "RES"]<-"12345678"
 p <-ggplot(noself2, aes(x=PERIOD, y=VALUE, group=CITED))
 p + geom_smooth(aes(group=CITED, color = CITED), se=F, span=.5) + 
   ggtitle("\n") + 
-  labs(title = "Citations among Six Economics Journals and One Finance Journals",
+  labs(title = "Citations among Six Economics Journals and One Finance Journal",
        subtitle = "(excluding self-citations)") +
   scale_shape_manual(values=c(1:7)) + 
   theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
   labs(x = "\nPeriod", y = "% of citations received\n") +  
   theme(plot.title=element_text(family="Arial", face="bold", size=14)) + 
   theme(panel.background = element_rect(fill='white', colour='grey')) +
-  theme(panel.grid.major = element_line(size = 0.25, colour = "grey")) +
-  theme(panel.grid.minor = element_line(size = 0.1, colour = "grey")) +
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
   geom_point(aes(color = CITED), alpha=7/10, size = 0.8) 
 
-
-
-linetype=noself2$linetype
-geom_point(aes(color = CITED), alpha=7/10)
 

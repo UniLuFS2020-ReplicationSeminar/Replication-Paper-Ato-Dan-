@@ -3,6 +3,7 @@ library("tidyverse")
 library("rio")
 library("reshape")
 library("RColorBrewer")
+library("directlabels")
 
 ####Figure 3
 ##who do economists cite?
@@ -102,20 +103,21 @@ m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twoda
 m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
 q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
-q + geom_smooth(aes(group = DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4, linetype = m_disjunct_percent$linetype, show.legend = TRUE) + 
-  scale_colour_brewer(palette = "Set2") +
-  theme(panel.background = element_rect(fill='white')) + 
-  theme_classic() +
-  geom_point(aes(size = .1, shape = DISCIPLINE, color = DISCIPLINE), alpha = 5/10) + 
-  ggtitle("\n") + theme(axis.text.x = element_text(size = 8)) + 
-  theme(axis.text.x = element_text(angle = -60, face = "bold", size = 7, hjust = -0.1)) + 
-  theme(axis.text.y = element_text(face = "bold", size = 7)) + 
-  labs(x = "\nPeriod", y = "% of citations\n") +  
-  theme(plot.title = element_text(family="Arial", face="bold", size = 14)) + 
-  scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + 
-  theme(legend.position="none") 
-
-
+q + 
+  geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
+  geom_point(aes(color = DISCIPLINE), size = 1.5, alpha=7/10)+ 
+  #Axis + Title modifications
+  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
+  labs(x = "\nPeriod", y = "% of citations\n", title = "Extradisciplinary Citation in Five Top Economics Journals",
+         subtitle = "(to papers in fields of finance, statistics, business, political science, mathematics, sociology, and law)") +
+  #Background modifications
+  theme(panel.background = element_rect(fill='white', color = "grey")) + 
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
+  #Legend modifications
+  theme(legend.title=element_blank()) +
+  theme(legend.key=element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1)))
 
 # to generate the original figure like in the paper, we adjusted the code:
 # - Appendix deleted

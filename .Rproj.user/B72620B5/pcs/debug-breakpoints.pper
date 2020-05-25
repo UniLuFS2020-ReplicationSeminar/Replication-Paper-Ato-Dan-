@@ -1,21 +1,6 @@
 {
     "debugBreakpointsState" : {
         "breakpoints" : [
-            {
-                "editor_line_number" : 80,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 0,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 80,
-                "needs_updated_steps" : false,
-                "package_name" : "",
-                "path" : "~/Documents/Universität/Uni Luzern/4. Semester FS 20/Replication Seminar/Replication-Paper-Ato-Dan-/Replication/Replication Figure 3.R",
-                "state" : 1,
-                "type" : 1
-            }
         ]
     }
 }

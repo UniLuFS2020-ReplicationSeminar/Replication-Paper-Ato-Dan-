@@ -92,16 +92,12 @@ m_disjunct_percent$linetype<-as.character(m_disjunct_percent$variable)
 colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY", "linetype")
 head(m_disjunct_percent)
 tail(m_disjunct_percent,200)
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "FINANCE"]<-"solid"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "MATHEMATICS"]<-"dotdash"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "STATISTICS"]<-"12345678"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "SOCIOLOGY"]<-"dotted"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "BUSINESS"]<-"longdash"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "POLSCIENCE"]<-"F1"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "LAW"]<-"1F"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twodash"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
+
+m_disjunct_percent %>% 
+  rename(
+    FINANCE = Finance, STATISTICS = Statistics, POLSCIENCE = Polscience, BUSINESS = Business, LAW = Law, PSYCHOLOGY = Psychology, MATHEMATICS = Mathematics, SOCIOLOGY = Sociology, HEALTH = Health
+  )
 q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
 q + 
   geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
@@ -109,6 +105,10 @@ q +
   #Axis + Title modifications
   theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
   theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.title.x = element_text(size = 15)) + 
+  theme(axis.title.y = element_text(size = 15)) +
+  theme(title = element_text(size = 18)) +
+  theme(legend.text = element_text(size = 15, )) +
   labs(x = "\nPeriod", y = "% of citations\n", title = "Extradisciplinary Citation in Five Top Economics Journals",
          subtitle = "(to papers in fields of finance, statistics, business, political science, mathematics, sociology, and law)") +
   #Background modifications

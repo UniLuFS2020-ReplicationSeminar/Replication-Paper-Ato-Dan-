@@ -3,7 +3,6 @@ library("tidyverse")
 library("rio")
 library("reshape")
 library("RColorBrewer")
-library("directlabels")
 
 ####Figure 3
 ##who do economists cite?

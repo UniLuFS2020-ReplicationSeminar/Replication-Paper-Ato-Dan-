@@ -68,18 +68,26 @@ noself2$linetype[noself2$linetype == "QJE"]<-"F1"
 noself2$linetype[noself2$linetype == "RES"]<-"12345678"
 
 
-p <-ggplot(noself2, aes(x=PERIOD, y=VALUE, group=CITED))
-p + geom_smooth(aes(group=CITED, color = CITED), se=F, span=.5) + 
-  ggtitle("\n") + 
-  labs(title = "Citations among Six Economics Journals and One Finance Journal",
-       subtitle = "(excluding self-citations)") +
-  scale_shape_manual(values=c(1:7)) + 
-  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
-  theme(axis.text.y = element_text(size = 8)) + 
+p <-ggplot(noself2, aes(x = PERIOD, y = VALUE, group = CITED))
+p + geom_smooth(aes(group = CITED, color = CITED), se = FALSE, span = .5) +
+#Labs + x and y-axis modifications
+  labs(title = "\nCitations among Six Economics Journals and One Finance Journal",
+       subtitle = "(excluding self-citations)") +  
+  theme(title = element_text(size = 18)) +
   labs(x = "\nPeriod", y = "% of citations received\n") +  
-  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + 
-  theme(panel.background = element_rect(fill='white', colour='grey')) +
+  scale_shape_manual(values=c(1:7)) + 
+  theme(axis.text.x = element_text(size = 10, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 10)) + 
+  theme(axis.title.x = element_text(size = 15)) + 
+  theme(axis.title.y = element_text(size = 15)) + 
+#Background modifications
+  theme(panel.background = element_rect(fill = 'white', colour = 'grey')) +
   theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
-  geom_point(aes(color = CITED), alpha=7/10, size = 0.8) 
+  geom_point(aes(color = CITED), alpha = 7/10, size = 0.8) +
+#Legend modifications
+theme(legend.title = element_blank()) +
+  theme(legend.text = element_text(size = 15)) +
+  theme(legend.key = element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1)))
 
 

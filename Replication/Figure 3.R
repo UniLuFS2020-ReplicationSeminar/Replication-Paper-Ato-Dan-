@@ -73,6 +73,11 @@ disjunct_percent<-cbind(PERIOD=disjunct1_agg[,1], sweep(disjunct1_agg[,3:28],1,d
 dim(disjunct_percent)
 disjunct_percent<-aggregate(disjunct_percent[,c(2:27)], by=list(disjunct_percent$PERIOD), FUN=mean)
 
+##renaming columns:
+disjunct_percent <- disjunct_percent %>% select(Economics = ECONOMICS, Finance = FINANCE, Business = BUSINESS, Statistics = STATISTICS, Polscience = POLSCIENCE, Law = LAW, Psychology = PSYCHOLOGY, Mathematics = MATHEMATICS, Sociology = SOCIOLOGY, Health = HEALTH)
+
+colnames(disjunct_percent)
+View(disjunct_percent)
 ######## Graphs
 #With economics (1950:2012)
 disjunct_percent1<-disjunct_percent[26:56,c(1:6,9,12,13)]
@@ -84,30 +89,46 @@ p + geom_bar(stat="identity") + facet_grid(DISCIPLINE~., scale='free_y') + theme
 
 #Without economics (1950:2012)
 colnames(disjunct_percent)
+
 disjunct_percent2 <- disjunct_percent[26:56,c(1,3:6,9,11,12,13,16)]
+disjunct_percent2 <- select(disjunct_percent2, Group.1 = Group.1, Finance = FINANCE, Business = BUSINESS, Statistics = STATISTICS, Polscience = POLSCIENCE, Law = LAW, Psychology = PSYCHOLOGY, Mathematics = MATHEMATICS, Sociology = SOCIOLOGY, Health = HEALTH)
+
+View(disjunct_percent2)
 
 m_disjunct_percent<-melt(disjunct_percent2, id="Group.1")
 m_disjunct_percent$linetype<-as.character(m_disjunct_percent$variable)
 colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY", "linetype")
 head(m_disjunct_percent)
 tail(m_disjunct_percent,200)
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "FINANCE"]<-"solid"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "MATHEMATICS"]<-"dotdash"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "STATISTICS"]<-"12345678"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "SOCIOLOGY"]<-"dotted"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "BUSINESS"]<-"longdash"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "POLSCIENCE"]<-"F1"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "LAW"]<-"1F"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "PSYCHOLOGY"]<-"twodash"
-m_disjunct_percent$linetype[m_disjunct_percent$linetype == "HEALTH"]<-"dashed"
 
-q<-ggplot(m_disjunct_percent, aes(x=PERIOD,  y=FREQUENCY, group=DISCIPLINE))
-q + geom_smooth(aes(group=DISCIPLINE), se=F, span=.4, linetype=m_disjunct_percent$linetype, color="black") + 
-  geom_point(aes(shape=DISCIPLINE, size = 3), alpha=7/10)+ 
-  ggtitle("\n") + theme(axis.text.x = element_text(size = 6)) + 
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
-  labs(x = "\nPeriod", y = "% of citations\n") + 
-  theme(plot.title=element_text(family="Arial", face="bold", size=14)) + 
-  theme(panel.background = element_rect(fill='white', colour='grey')) + 
-  scale_shape_manual(values=c("F", "B", "S", "P", "L", "p", "M", "s", "H")) + 
-  theme(legend.position="none")
+
+q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
+q + 
+  geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
+  geom_point(aes(color = DISCIPLINE), size = 1.5, alpha=7/10) + 
+  #Axis + Title modifications
+  theme(axis.text.x = element_text(size = 10, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 10)) + 
+  theme(axis.title.x = element_text(size = 15)) + 
+  theme(axis.title.y = element_text(size = 15)) +
+  theme(title = element_text(size = 18)) +
+  labs(x = "\nPeriod", y = "% of citations\n", title = "Extradisciplinary Citation in Five Top Economics Journals",
+       subtitle = "(to papers in fields of finance, statistics, business, political science, mathematics, sociology, and law)") +
+  #Background modifications
+  theme(panel.background = element_rect(fill='white', color = "grey")) + 
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
+  #Legend modifications
+  theme(legend.title = element_blank()) +
+  theme(legend.text = element_text(size = 15)) +
+  theme(legend.key = element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1)))
+
+
+scale_x_discrete(breaks = c("1950-1952", "1952-1954", "1954-1956", "1956-1958", "1958-1960", "1960-1962", "1962-1964", "1964-1966", "1966-1968", "1968-1970", "1970-1972", "1972-1974", "1974-1976", "1976-1978", "1978-1980", "1980-1982", "1982-1984", "1984-1986", "1986-1988", "1988-1990", "1990-1992", "1992-1994", "1994-1996", "1996-1998", "1998-2000", "2000-2002", "2002-2004", "2004-2006", "2006-2008", "2008-2010", "2010-2012"), 
+                 labels = c("1950", "1952", "1954", "1956", "1958", "1960", "1962", "1964", "1966", "1968", "1970", "1972", "1974", "1976", "1978", "1980", "1982", "1984", "1986", "1988", "1990", "1992", "1994", "1996", "1998", "2000", "2002", "2004", "2006", "2008", "2010-2012")) +
+  
+  # to generate the original figure like in the paper, we adjusted the code:
+  # - Appendix deleted
+  # - Size from geom_point modified from size = 3 to size = 0.5
+  # - regarding theme axis: from angel = +60 to angel = -60 and from hjust = 1 to hjust = 2
+  

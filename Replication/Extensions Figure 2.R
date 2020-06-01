@@ -11,18 +11,25 @@ orgs <- rm(list=ls())
 orgs <- rio::import("Data/Org-Affiliations.csv")
 View(orgs)
 
-#
 props.org <- as.data.frame(prop.table(table(orgs$RANK, orgs$ORGANIZATION),2)*100)
 colnames(props.org) <- c("Rank", "Organization", "Freq")
 
 props.org$Rank<-factor(props.org$Rank, levels = c("Top 5","Top 6-10","Top 11-20","Top 21-50","Top 51-100","Not ranked"))
 
-p<-ggplot(props.org, aes(x=Rank, y=Freq, fill=Organization)) +
-  scale_fill_brewer(palette = "Set1")
-p+geom_bar(position="dodge", stat="identity")+ 
-  xlab("\n\nRanking\n")+ 
-  ylab("Council Members in (%)\n\n")+
-  theme_bw() + 
-  theme(axis.text.x  = element_text(size=06), legend.text = element_text(size = 12), legend.title = element_text(size=12)) +
-  ggtitle("Academic background of counsil members 
-          (AEA, APSA and ASA)\n") 
+p <- ggplot(props.org, aes(x = Rank, y = Freq, fill = Organization)) 
+p + geom_bar(position="dodge", stat="identity") + 
+  labs(x = "\nRanking", y = "Council Members in (%)\n\n", title = "Academic background of counsil members",  
+          subtitle = "(AEA, APSA and ASA)") + 
+  theme(axis.text.x = element_text(size = 10, vjust = -2.5)) + 
+  theme(axis.text.y = element_text(size = 10, margin = margin(0, 5, 0, 0))) + 
+  theme(axis.title.x = element_text(size = 15)) + 
+  theme(axis.title.y = element_text(size = 15)) +
+  theme(title = element_text(size = 18)) +
+  #Background modifications
+  theme(panel.background = element_rect(fill='white', color = "grey")) + 
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
+  #Legend modifications
+  theme(legend.title = element_blank()) +
+  theme(legend.text = element_text(size = 15)) +
+  theme(legend.key = element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1)))

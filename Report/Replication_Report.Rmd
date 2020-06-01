@@ -8,10 +8,12 @@ output:
 ---
 
 ```{r setup,include = FALSE}
+knitr::opts_chunk$set(error = TRUE)
 library("ggplot2")
 library("tidyverse")
 library("rio")
 library("reshape")
+library("RColorBrewer")
 ```
 
 # **Replication Report**
@@ -27,19 +29,19 @@ Apart from that, the authors comments were somtimes misleading so that we could 
 ## **Description of the data**
 Our replication paper only contains descriptive statistics. For this reason, we mainly focus on the applied method and the operationalization of the variables.  
 
-- Criticize aggressive claims
-1) Insularity: Sufficient evidence with no interidisciplinary benefit and citing others
-2) Hierarchy: Not a good measure to proove superiority of economists
-3) Other differentiators: Good indicator for their main thesis -> evidence for selfishness, more income, and higher, self-confidence 
-4) Reorientation to business and finance not a good indicator for their main thesis
-- Methods: Only descriptives -> normative claims 
+1. Criticize aggressive claims
+    + Insularity: Sufficient evidence with no interidisciplinary benefit and citing others
+    + Hierarchy: Not a good measure to proove superiority of economists
+    + Other differentiators: Good indicator for their main thesis -> evidence for selfishness, more income, and higher, self-confidence 
+    + Reorientation to business and finance not a good indicator for their main thesis
+    
+2. Methods: Only descriptives -> normative claims 
 
-Bad Balance between descriptive and normative claims. What is the overall purpose of the paper? Do they simply describe the shifting relationships and the general relationship of the 2 disciplines and how does that fit together with their normative claim that economists see themselves as a superior class. 
+Bad Balance between descriptive and normative claims. What is the overall purpose of the paper? Do they simply describe the shifting relationships and the general relationship of the two disciplines and how does that fit together with their normative claim that economists see themselves as a superior class. 
 
 
 ## **Tables & Figures**
-In this section we present the replicated tables and figures. This includes figure 2, figure 3, figure 4.
-This is the commented/replicated version (see orginial version in appendix)
+In this section we present the replicated tables and figures. This includes figure 2, figure 3 and figure 4.
 
 **Figure 2**
 
@@ -64,10 +66,9 @@ p + geom_bar(position="dodge", stat = "identity") +
   theme(axis.text.x  = element_text(size = 13), legend.text = element_text(size = 12), legend.title = element_text(size=12))
 ```
 
-
 **Figure 3**
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, results=}
+```{r echo=FALSE, message=FALSE, warning=FALSE, results=FALSE}
 ####Figure 3
 ##Import data set
 here::here("Data") #Use here::here to set working directory
@@ -268,5 +269,222 @@ p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype=noself2$linetype, colo
   geom_point(aes(shape=CITED), alpha=7/10)
 ```
 
+Our Replication Work consists of two steps: First, we had a detailed look at the data and the code junk provided from the authors. We really wanted to understand the entire code. That's why we extensively commented the script as a preliminary step. This helped us to gain better understanding of the procedure from the authors.
+In a second step, we started to play around with the script and searched for improvements. As this paper only contains simple descriptive statistics, we mainly focused on their method (1.) and visualization (2.). 
 
+1. Regarding the method, we noticed that the authors did not develope or refer to any theoretical background. We are not sure if this is compatible with a scientific ethos of an deductive approach. We also realized, that the authors came up with strong normative claims evolved from simple descriptive statistics. Therefore we critize their aggressive claims which are partly not in charge with their descriptives:
+
+    + Economists mindset about interdisciplinary knowledge (see table 2): Conclusion from a very small sample (only 44 economists sampled) which is not representative.
+
+    + Hierarchy: Not a good measure to proove superiority of economists because indicates nothing related to their claim of economists seeing themselves as superior. This desciptive analysis does not lead to causal explanation of the dependent variable.
+
+    + Reorientation to business and finance is not a good indicator for their main thesis.
+
+    + Conclusion: There are differentiators suitable for their claims: evidence for selfishness, more income, higher self-confidence, strong world-view/norms, unusual power of economists in the real world, successful rational choice theory (adapted from other social sciences), etc. However, the authors did not manage to proove causal interference. 
+
+2. Regarding the visualization, we improved the appearance of the main figures. This includes changes in the layout of the x- and y-axis, changes with the theme() function the use of the R color brewer package to add new color pallettes. We also created and/or modified legends and titles. The improvements can be seen in the following section.
+
+## **Our Extensions**
+
+**Extended Figure 2**
+```{r echo=FALSE, warning = FALSE, message=FALSE, results = FALSE}
+####Figure 2
+##Import data set
+here::here("Data")
+list.files()
+orgs <- rm(list=ls())
+orgs <- rio::import("Data/Org-Affiliations.csv")
+View(orgs)
+
+props.org <- as.data.frame(prop.table(table(orgs$RANK, orgs$ORGANIZATION),2)*100)
+colnames(props.org) <- c("Rank", "Organization", "Freq")
+
+props.org$Rank<-factor(props.org$Rank, levels = c("Top 5","Top 6-10","Top 11-20","Top 21-50","Top 51-100","Not ranked"))
+
+p <- ggplot(props.org, aes(x = Rank, y = Freq, fill = Organization)) 
+p + 
+  geom_bar(position="dodge", stat="identity") +  
+  #Axis + Title modifications
+  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.title.x = element_text(size = 15)) + 
+  theme(axis.title.y = element_text(size = 15)) +
+  theme(title = element_text(size = 18)) +
+  theme(legend.text = element_text(size = 15, )) +
+  labs(x = "\nRanking", y = "Council Members in (%)\n\n", title = "Academic Background of Council Members",  
+          subtitle = "(AEA, APSA and ASA)") + 
+  #Background modifications
+  theme(panel.background = element_rect(fill='white', color = "grey")) + 
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
+  #Legend modifications
+  theme(legend.title=element_blank()) +
+  theme(legend.key=element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1))) +
+  #Color modifications
+  scale_fill_manual(values = brewer.pal(3, "Blues")[3:1])
+
+```
+
+**Extended Figure 3**
+```{r echo=FALSE, warning = FALSE, message=FALSE, results = FALSE, error=FALSE}
+####Figure 3
+##who do economists cite?
+here::here("Data")
+list.files()
+disjunct <- rio::import("Data/Base5j_Disj_Redux.csv")
+View(disjunct)
+
+##dimensions of the data set:
+dim(disjunct) 
+table(disjunct$JOURNAL, disjunct$YEAR)
+
+##creating a new variable: "two year period" 
+disjunct$TYP <- disjunct$YEAR
+TYP_labs <- paste(seq(1900,2010, by=2), seq(1902,2012, by=2),sep="-") #labs is not a good choice for a new character name because it is also the name of the function "labels". Better: TYP_labs. 
+disjunct$TYP <- cut(disjunct$TYP, breaks = seq(1900,2012, by = 2), labels = TYP_labs, include.lowest = T) #There is a seq intercal of two, because the plot in the paper visualizes two year period
+
+##unaccounted citations of fields that are not relevant for figure 3 (DK + OTHERS)
+#here is not clear. what DK means
+colnames(disjunct)
+disjunct$UNACC<-apply(disjunct[,c(9,25)],1,sum) #they indicate all rows in a vector of the columns "OTHER" and "DK" because they will not be accounted
+disjunct$TOTAL_CITES<-apply(disjunct[,c(5:31)], 1, sum) 
+disjunct$ACCOUNTED <- disjunct$TOTAL_CITES-disjunct$UNACC #makes perfect sense, but one could also calculate it in positive way
+disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100 #what exactly do we calculate and for what reason?
+View(disjunct)
+
+#######Standardization. Compute for each article the percentage of each discipline relative to the number of citations accounted for
+#######Reorder the dataframe for the sake of clarity
+##for the definition of a base year (1900)
+colnames(disjunct)
+disjunct1 <- disjunct[,c(1,2,4,5:8,10:24,26:31,36,33,34)] #DK,OTHER,NR,UNACC_RATE,TOTAL_CITES are excluded
+colnames(disjunct1)
+head(disjunct1,1)
+dim(disjunct1) 
+
+######Percentage of each discipline (relative to the number of articles *accounted for*), per discipline
+#First, aggregate by a period of 2 years
+colnames(disjunct1)
+disjunct1_agg <- aggregate(disjunct1[,c(4:29)], by = list(disjunct1$TYP, disjunct1$JOURNAL), FUN=sum) #aggregating the study programmes (and ACCOUNTED) by listing through two year period variable and Journal. Unclear why ACCOUNTED is included here
+
+dim(disjunct1_agg) # head(disjunct1_agg)
+disjunct_percent<-cbind(PERIOD=disjunct1_agg[,1], sweep(disjunct1_agg[,3:28],1,disjunct1_agg[,28],`/`)*100) #why didnt they exclude ACCOUNTED in the previous definition?
+
+dim(disjunct_percent)
+disjunct_percent<-aggregate(disjunct_percent[,c(2:27)], by=list(disjunct_percent$PERIOD), FUN=mean)
+
+######## Graphs
+#With economics (1950:2012)
+disjunct_percent1<-disjunct_percent[26:56,c(1:6,9,12,13)]
+m_disjunct_percent<-melt(disjunct_percent1, id="Group.1")
+colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY")
+
+#Without economics (1950:2012)
+colnames(disjunct_percent)
+disjunct_percent2 <- disjunct_percent[26:56,c(1,3:6,9,11,12,13,16)]
+
+m_disjunct_percent<-melt(disjunct_percent2, id="Group.1")
+m_disjunct_percent$linetype<-as.character(m_disjunct_percent$variable)
+colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY", "linetype")
+head(m_disjunct_percent)
+tail(m_disjunct_percent,200)
+
+
+m_disjunct_percent %>% 
+  rename(
+    FINANCE = Finance, STATISTICS = Statistics, POLSCIENCE = Polscience, BUSINESS = Business, LAW = Law, PSYCHOLOGY = Psychology, MATHEMATICS = Mathematics, SOCIOLOGY = Sociology, HEALTH = Health
+  )
+
+q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
+q + 
+  geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
+  geom_point(aes(color = DISCIPLINE), size = 1.5, alpha=7/10)+ 
+  #Axis + Title modifications
+  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.title.x = element_text(size = 12)) + 
+  theme(axis.title.y = element_text(size = 12)) +
+  theme(title = element_text(size = 12)) +
+  theme(legend.text = element_text(size = 10)) +
+  labs(x = "\nPeriod", y = "% of citations\n", title = "Extradisciplinary Citation in Five Top Economics Journals",
+         subtitle = "(to papers in fields of finance, statistics, business, political science, mathematics, sociology, and law)") +
+  #Background modifications
+  theme(panel.background = element_rect(fill='white', color = "grey")) + 
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
+  #Legend modifications
+  theme(legend.title=element_blank()) +
+  theme(legend.key=element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1))) +
+  #Color Modifications
+  scale_color_brewer(palette = "Paired")
+
+```
+
+
+**Extended Figure 4**
+```{r echo=FALSE, warning = FALSE, message=FALSE, results = FALSE}
+rm(list=ls())
+crossrefs <- rio::import("Data/crossrefs.csv")
+View(crossrefs)
+dim(crossrefs)
+
+# Normalize by year/ journal
+crossrefs2<-cbind(crossrefs[,c(1:2)],sweep(crossrefs[,3:9],1,crossrefs[,11],`/`)*100) # definition of new variable crossrefs2: # all vectors including all rows of journals / the vector of total cites 
+
+#Reshape
+m_crossrefs <- melt(crossrefs2, id=c("CITING", "YEAR")) #does not change much, because it is just a transformation 
+colnames(m_crossrefs)<-c("CITING", "YEAR", "CITED", "VALUE")
+
+################################## Figure 4: Citations received from the 6 other journals (Figure 4)
+x=seq(1950,2010, by=2)
+y=seq(1951,2011, by=2)
+
+file<-NULL 
+
+for (i in 1:length(x)){
+  TAB <- m_crossrefs[m_crossrefs$YEAR %in% c(x[i]:y[i]),] #dim(TAB)	
+  head(TAB)
+  mat<-xtabs(VALUE~CITING+CITED, data=TAB)#Present data as a matrix
+  mat<-mat[,rownames(mat)]
+  diag(mat)<-0 # Remove self-citations
+  cited<-addmargins(mat,1)[8,] #Calculate sum citations received 
+  citing<-addmargins(mat,2)[,8] #Calculate sum citations made
+  mat<-sweep(mat[,1:7],1,citing,`/`)*100
+  page<-cbind(melt(mat), YEAR=rep(paste(x[i],"-",y[i], sep=""), nrow(melt(mat))))
+  file<-rbind(file, page)
+}
+#Remove self-citations	
+noself<-file[file$CITING != file$CITED,]
+head(noself)
+noself2<-aggregate(noself$value, by=list(noself$YEAR, noself$CITED), FUN=mean)
+colnames(noself2)<-c("PERIOD", "CITED", "VALUE")
+head(noself2, 10)
+noself2$linetype<-as.character(noself2$CITED)
+head(noself2)
+tail(noself2, 200)
+
+p <-ggplot(noself2, aes(x = PERIOD, y = VALUE, group = CITED))
+p + geom_smooth(aes(group = CITED, color = CITED), se = FALSE, span = .5) +
+#Labs + x and y-axis modifications
+  labs(title = "\nCitations among Six Economics Journals and One Finance Journal",
+       subtitle = "(excluding self-citations)") +  
+  theme(title = element_text(size = 12)) +
+  scale_shape_manual(values=c(1:7)) + 
+  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.title.x = element_text(size = 12)) + 
+  theme(axis.title.y = element_text(size = 12)) + 
+  labs(x = "\nPeriod", y = "% of citations received\n") +  
+#Background modifications
+  theme(panel.background = element_rect(fill = 'white', colour = 'grey')) +
+  theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
+  geom_point(aes(color = CITED), alpha = 7/10, size = 0.8) +
+#Legend modifications
+theme(legend.title = element_blank()) +
+  theme(legend.text = element_text(size = 10)) +
+  theme(legend.key = element_rect(fill = "White")) +
+  guides(colour = guide_legend(override.aes = list(size = 1)))
+#Color modifications
+  scale_color_brewer(palette = "Paired")
+
+```
 

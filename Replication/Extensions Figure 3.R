@@ -102,8 +102,8 @@ q +
   geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
   geom_point(aes(color = DISCIPLINE), size = 1.5, alpha=7/10)+ 
   #Axis + Title modifications
-  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
-  theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.text.x = element_text(size = 10, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 10)) + 
   theme(axis.title.x = element_text(size = 15)) + 
   theme(axis.title.y = element_text(size = 15)) +
   theme(title = element_text(size = 18)) +
@@ -117,10 +117,5 @@ q +
   theme(legend.title=element_blank()) +
   theme(legend.key=element_rect(fill = "White")) +
   guides(colour = guide_legend(override.aes = list(size = 1)))
-
-# to generate the original figure like in the paper, we adjusted the code:
-# - Appendix deleted
-# - Size from geom_point modified from size = 3 to size = 0.5
-# - regarding theme axis: from angel = +60 to angel = -60 and from hjust = 1 to hjust = 2
 
 

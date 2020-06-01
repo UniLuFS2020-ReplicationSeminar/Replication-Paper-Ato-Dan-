@@ -210,7 +210,7 @@ dim(disjunct1)
 ######Percentage of each discipline (relative to the number of articles *accounted for*), per discipline
 #First, aggregate by a period of 2 years
 colnames(disjunct1)
-disjunct1_agg<-aggregate(disjunct1[,c(4:29)], by=list(disjunct1$TYP, disjunct1$JOURNAL), FUN=sum)
+disjunct1_agg <- aggregate(disjunct1[, c(4:29)], by = list(disjunct1$TYP, disjunct1$JOURNAL), FUN=sum)
 
 dim(disjunct1_agg) # head(disjunct1_agg)
 disjunct_percent<-cbind(PERIOD=disjunct1_agg[,1], sweep(disjunct1_agg[,3:28],1,disjunct1_agg[,28],`/`)*100)

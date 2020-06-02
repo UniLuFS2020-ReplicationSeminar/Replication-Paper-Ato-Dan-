@@ -388,16 +388,10 @@ colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY", "linetype")
 head(m_disjunct_percent)
 tail(m_disjunct_percent,200)
 
-
-m_disjunct_percent %>% 
-  rename(
-    FINANCE = Finance, STATISTICS = Statistics, POLSCIENCE = Polscience, BUSINESS = Business, LAW = Law, PSYCHOLOGY = Psychology, MATHEMATICS = Mathematics, SOCIOLOGY = Sociology, HEALTH = Health
-  )
-
 q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
 q + 
   geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
-  geom_point(aes(color = DISCIPLINE), size = 1.5, alpha=7/10)+ 
+  geom_point(aes(color = DISCIPLINE), size = 0.8, alpha=7/10)+ 
   #Axis + Title modifications
   theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
   theme(axis.text.y = element_text(size = 8)) + 

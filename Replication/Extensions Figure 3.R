@@ -15,17 +15,6 @@ View(disjunct)
 dim(disjunct) 
 table(disjunct$JOURNAL, disjunct$YEAR)
 
-##plotting the year and the number of references in percentage:
-p <- ggplot(disjunct, aes(factor(YEAR), NUMB_REF))
-p + geom_boxplot(outlier.size = NA) + #aren't the outliers still present in the plot?? Function for removing outliers isnt correct anymore 
-  ggtitle("Number of references in 5 Top Economics Journals\nAER, QJE, JPE, RES, ECTRCA\n") + 
-  theme(plot.title=element_text(face="bold", size=14))+ 
-  labs(x = "\nYear", y = "Percentage\n")+ #why is the description in the quotation marks not equal to the description of the layers in the plot?
-  scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #the labels are going til 2010, but the data reaches up to 2012
-  ylim(0,100)+
-  theme_bw() + #white background
-  stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="brown4") #fun.y is an outdated function; shows the median trend in the plot
-
 ##creating a new variable: "two year period" 
 disjunct$TYP <- disjunct$YEAR
 TYP_labs <- paste(seq(1900,2010, by=2), seq(1902,2012, by=2),sep="-") #labs is not a good choice for a new character name because it is also the name of the function "labels". Better: TYP_labs. 
@@ -40,18 +29,6 @@ disjunct$ACCOUNTED <- disjunct$TOTAL_CITES-disjunct$UNACC #makes perfect sense, 
 disjunct$UNACC_RATE <- (disjunct$UNACC/disjunct$TOTAL_CITES)*100 #what exactly do we calculate and for what reason?
 View(disjunct)
 
-##Appendix
-##plotting the Unaccounted-rate
-p <- ggplot(disjunct, aes(factor(YEAR), UNACC_RATE)) + stat_boxplot(outlier.size = NA) #why year with the factor function?
-
-p + geom_boxplot(outlier.size = NA) + 
-  theme(plot.title=element_text(face="bold", size=14)) + 
-  labs(x = "\nYear", y = "Percentage\n") + 
-  scale_x_discrete(breaks = seq(1900,2012,10), labels = seq(1900,2010,10)) + #again like above
-  theme_bw()  +  #white background
-  stat_summary(fun.y="median", geom="point", shape=23, size=2, fill="darkgoldenrod")
-
-
 #######Standardization. Compute for each article the percentage of each discipline relative to the number of citations accounted for
 #######Reorder the dataframe for the sake of clarity
 ##for the definition of a base year (1900)
@@ -60,7 +37,6 @@ disjunct1 <- disjunct[,c(1,2,4,5:8,10:24,26:31,36,33,34)] #DK,OTHER,NR,UNACC_RAT
 colnames(disjunct1)
 head(disjunct1,1)
 dim(disjunct1) 
-
 
 ######Percentage of each discipline (relative to the number of articles *accounted for*), per discipline
 #First, aggregate by a period of 2 years
@@ -79,12 +55,15 @@ disjunct_percent1<-disjunct_percent[26:56,c(1:6,9,12,13)]
 m_disjunct_percent<-melt(disjunct_percent1, id="Group.1")
 colnames(m_disjunct_percent)<-c("PERIOD", "DISCIPLINE", "FREQUENCY")
 
-p <- ggplot(m_disjunct_percent, aes(PERIOD,  FREQUENCY))
-p + geom_bar(stat="identity") + facet_grid(DISCIPLINE~., scale='free_y') + theme(legend.position="none")  + ggtitle("Who do Economists Cite?\n Most cited disciplines cited in Five top journals (1900-2012)\n") + theme(axis.text.x = element_text(size = 6)) + theme(axis.text.x = element_text(angle = 60, hjust = 1)) + labs(x = "\nYear", y = "% of citations to this discipline\n")+  theme(plot.title=element_text(family="Arial", face="bold", size=14))  + theme(strip.text.y = element_text(size = 5))+ theme(panel.background = element_rect(fill='white', colour='grey'))
-
 #Without economics (1950:2012)
 colnames(disjunct_percent)
 disjunct_percent2 <- disjunct_percent[26:56,c(1,3:6,9,11,12,13,16)]
+
+#renaming columns (Eliminating capital letters):
+disjunct_percent2 <- disjunct_percent2 %>% select(Group.1 = Group.1, Finance = FINANCE, Business = BUSINESS, Statistics = STATISTICS, Polscience = POLSCIENCE, Law = LAW, Psychology = PSYCHOLOGY, Mathematics = MATHEMATICS, Sociology = SOCIOLOGY, Health = HEALTH)
+
+colnames(disjunct_percent2)
+View(disjunct_percent2)
 
 m_disjunct_percent<-melt(disjunct_percent2, id="Group.1")
 m_disjunct_percent$linetype<-as.character(m_disjunct_percent$variable)
@@ -93,29 +72,27 @@ head(m_disjunct_percent)
 tail(m_disjunct_percent,200)
 
 
-m_disjunct_percent %>% 
-  rename(
-    FINANCE = Finance, STATISTICS = Statistics, POLSCIENCE = Polscience, BUSINESS = Business, LAW = Law, PSYCHOLOGY = Psychology, MATHEMATICS = Mathematics, SOCIOLOGY = Sociology, HEALTH = Health
-  )
 q <- ggplot(m_disjunct_percent, aes(x=PERIOD,  y = FREQUENCY, group = DISCIPLINE))
 q + 
-  geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .4) + 
-  geom_point(aes(color = DISCIPLINE), size = 1.5, alpha=7/10)+ 
+  geom_smooth(aes(group=DISCIPLINE, color = DISCIPLINE), se = FALSE, span = .5) + 
+  geom_point(aes(color = DISCIPLINE), size = 0.8, alpha=7/10) + 
   #Axis + Title modifications
-  theme(axis.text.x = element_text(size = 10, angle = -60, hjust = -0.1)) + 
-  theme(axis.text.y = element_text(size = 10)) + 
-  theme(axis.title.x = element_text(size = 15)) + 
-  theme(axis.title.y = element_text(size = 15)) +
-  theme(title = element_text(size = 18)) +
-  theme(legend.text = element_text(size = 15, )) +
-  labs(x = "\nPeriod", y = "% of citations\n", title = "Extradisciplinary Citation in Five Top Economics Journals",
-         subtitle = "(to papers in fields of finance, statistics, business, political science, mathematics, sociology, and law)") +
-  #Background modifications
+  theme(axis.text.x = element_text(size = 8, angle = -60, hjust = -0.1)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.title.x = element_text(size = 12)) + 
+  theme(axis.title.y = element_text(size = 12)) +
+  theme(title = element_text(size = 12)) +
+  labs(x = "\nPeriod", y = "% of citations\n", title = "Extradisciplinary Citation in Five Top Economics Journals") +
+  scale_colour_manual(values = brewer.pal(9, "Paired")[1:9]) +
+  #Bckground Modifications 
   theme(panel.background = element_rect(fill='white', color = "grey")) + 
   theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +
   #Legend modifications
   theme(legend.title=element_blank()) +
   theme(legend.key=element_rect(fill = "White")) +
-  guides(colour = guide_legend(override.aes = list(size = 1)))
+  guides(colour = guide_legend(override.aes = list(size = 1)))+
+  theme(legend.text = element_text(size = 10)) +
+  #Color Modifications
+  scale_color_brewer(palette = "Paired")
 
 

@@ -14,36 +14,33 @@ library("tidyverse")
 library("rio")
 library("reshape")
 library("RColorBrewer")
-library("extrafont")
 ```
 
 # **Replication Report**
 
-**Word Counter: X** 
+**Word Counter: 1'306** 
 
 ## **Introduction**
 The overall transparency of the paper was mediocre. They provided an extensive readme file with a proper explanation of the script about all tables and figures. Moreover, we appreciated their comments within the scripts allowing an exact understanding of the methods and procedures used to visualize the data.  
-However, we were not able to reproduce all tabes and figures due to missing scripts and/or datasets. This was the case for table 1, table 2, figure 1 and figure 5. The ReadMe.txt file contained URLs to downaload the datasets for figure 1 and figure 5. Nevertheless, the [URL of figure 1](https://www.asanet.org/research/stats/social_science_degrees_by_gender_since_1966.cfm) was invalid, probably due to a major update of the website. Providing URLs is definitely not a good choice to ensure the long-term replicapiblity of a scientific paper as they get invalid from time to time due to website updates. The [URL of figure 5](https://www.bls.gov/oes/tables.htm) was still valid but the presented dataset did not clearly indicate the categorization of the variables (e.g. Did the authors include the category "architects" to the category of "engineers"?). We also reached out to the authors to get the missing scripts and datasets, without any success.  
-Apart from that, the authors comments were somtimes misleading so that we could not to assign specific sections of the script to the corresponding tables or figures. E.g. There was an appendix after figure 3 that was already part of figure 4. This led to intial confusion as this additional junks of code substantially changed the looks and results of figure 3.
-
+However, we were not able to reproduce all tabes and figures due to missing scripts and/or datasets. This was the case for table 1, table 2, figure 1, and figure 5. The ReadMe.txt file contained URLs to download the datasets for figure 1 and figure 5. Nevertheless, the [URL of figure 1](https://www.asanet.org/research/stats/social_science_degrees_by_gender_since_1966.cfm) was invalid, probably due to a major update of the website. Providing URLs is not a good choice to ensure the long-term replicability of a scientific paper as they get invalid from time to time due to website updates. The [URL of figure 5](https://www.bls.gov/oes/tables.htm) was still valid but the presented dataset did not indicate the categorization of the variables (e.g. Did the authors include the category "architects" to the category of "engineers"?). We also reached out to the authors to get the missing scripts and datasets, without any success.  
+Apart from that, the author's comments were sometimes misleading so that we could not assign specific sections of the script to the corresponding tables or figures. E.g. There was an appendix after figure 3 that was already part of figure 4. This led to initial confusion as these additional junks of code substantially changed the looks and results of figure 3.
 
 ## **Analysis of the Paper/Data**
-Our replication paper only contains descriptive statistics. For this reason, we mainly focus on the applied method and the operationalization of the variables. The paper is called "The Superiority of Economists". We deduced the main thesis: Economists see themselves at the top of social science. The four independent variabels include: insularity, hierarchy, reorientation towards business, and other differentiators
+The paper is called "The Superiority of Economists". We deduced the main thesis: **Economists see themselves at the top of social science**. The four independent variables include insularity, hierarchy, a reorientation towards business, and other differentiators.
 
-In our view, the authors do not really provide enough evidence to back-up such a strong claim. Especially by evaluating the operationalization of their 4 independant variables it becomes clear that the authors suceed in pointing out differences between the discipline of economics and other social sciences but do not fully suceed in explaining their normative claims. The following sections should explain this critique
+Our replication work consists of two steps: First, we had a detailed look at the data and the code junk provided by the authors. We wanted to understand the entire code. That's why we extensively commented on the script as a preliminary step. This helped us to gain a better understanding of the procedure and methods used by the authors.
+In a second step, we started to play around with the script and searched for improvements. As this paper only contains descriptive statistics, we mainly focused on their method (1.) and visualization (2.). 
 
-**Our Critique**
+Regarding the method, we noticed that the authors did not develop or refer to any theoretical background. We are not sure if this is compatible with a scientific ethos of a deductive approach. We also realized that the authors came up with strong normative claims that evolved from simple descriptive statistics. Therefore, we criticize their aggressive claims which are partly not in line with the use of simple descriptives. This bad balance between descriptive and normative claims is also a result of the unclear formulation of their main thesis. After reading the paper several times we still asked ourselves: what is the actual purpose of the paper? Is it simply describing the shifting relationships and the general relationship of the different social sciences? But again, how does that fit together with their normative claim that economists see themselves as a superior class. Our main critic of the independent variables are the following:
 
-1. Criticize aggressive claims
-  + Insularity: Sufficient evidence with no interidisciplinary benefit in citing others. 
-  + Hierarchy: Not a good measure to proove superiority of economists. Hierarchy itself is a differentiator but not clear evidence that economists see themselves as a suerior class. 
-  + Reorientation to business and finance not a good indicator for their main thesis.
-  + Other differentiators: Good indicator for their main thesis -> evidence for selfishness, more income, and higher, self-confidence 
-
-
-2. Methods: The authors only make use of descriptive statisctis. Descriptives might be a good fit to draw lines and show differences between disciplines but certainly not the right method to support their thesis and and normative claims. We criticize the authors overshooting of descriptives. From a logical standpoint the paper could be prone to the naturlistic fellacy as they deduce normative claims from a descriptive base.
-This bad balance between descriptive and normative claims is also a result from the unclear formulation of their main thesis. After reading he paper several times we still asked ourselves: what is the actual purpose of the paper? Is it simply describing the shifting relationships and the general relationship of the two disciplines? But again, how does that fit together with their normative claim that economists see themselves as a superior class. 
-
+ + Insularity: Sufficient evidence with no interdisciplinary benefit inciting others. 
+ + Economists mindset about interdisciplinary knowledge (see table 2): Conclusion from a very small sample (only 44 economists sampled) which 
+   is not representative.
+ + Hierarchy: Not a good measure to prove the superiority of economists because it indicates nothing related to their claim of economists seeing themselves as superior. This descriptive analysis does not lead to a causal explanation of the dependent variable. Hierarchy itself is a differentiator but not clear evidence that economists see themselves as a superior class. 
+ + Reorientation to business and finance is not a good indicator of their main thesis.
+ + Other differentiators: Some differentiators are suitable for their claims: evidence for selfishness, more income, higher self-confidence, strong world-view/norms, unusual power of economists in the real world, successful rational choice theory (adapted from other social sciences), etc. However, the authors did not manage to prove causal inference for these differentiators.
+ 
+In our view, the authors do not provide enough evidence to back-up their strong claim. Especially by evaluating the operationalization of their 4 independent variables, it becomes clear that the authors succeed in pointing out differences between the discipline of economics and other social sciences but do not fully succeed in explaining their normative claims. Descriptives might be a good fit to draw lines and show differences between disciplines but certainly not the right method to support their thesis and normative claims. That's why we criticize the authors overshooting of descriptives. From a logical standpoint, the paper could be prone to the naturalistic fallacy as they deduce normative claims from a descriptive base.
 
 ## **Tables & Figures**
 In this section we present the replicated tables and figures. This includes figure 2, figure 3, and figure 4.
@@ -198,20 +195,25 @@ View(mat)
 #Remove self-citations	
 noself <- file[file$CITING != file$CITED,]
 head(noself)
-noself2<-aggregate(noself$value, by=list(noself$YEAR, noself$CITED), FUN=mean)
+noself2 <- aggregate(noself$value, by=list(noself$YEAR, noself$CITED), FUN=mean)
 colnames(noself2)<-c("PERIOD", "CITED", "VALUE")
 head(noself2, 10)
-noself2$linetype<-as.character(noself2$CITED)
+noself2$linetype <- as.character(noself2$CITED)
 head(noself2)
 tail(noself2, 200)
 
-#Additional line of code used to display Arial in RMarkdown pdf
-font_import(pattern="[A/a]rial", prompt=FALSE)
+noself2$linetype[noself2$linetype == "AER"]<-"solid"
+noself2$linetype[noself2$linetype == "ECTRA"]<-"dashed"
+noself2$linetype[noself2$linetype == "EJ"]<-"dotted"
+noself2$linetype[noself2$linetype == "JFIN"]<-"dotdash"
+noself2$linetype[noself2$linetype == "JPE"]<-"longdash"
+noself2$linetype[noself2$linetype == "QJE"]<-"F1"
+noself2$linetype[noself2$linetype == "RES"]<-"12345678"
 
 p <- ggplot(noself2, aes(x=PERIOD, y=VALUE, group=CITED))
-p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype=noself2$linetype, color="black") + 
-  ggtitle("\n") + 
+p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype = noself2$linetype, color="black")+
   scale_shape_manual(values=c(1:7)) + 
+  ggtitle("\n") + 
   theme(axis.text.x = element_text(size = 6)) + 
   theme(axis.text.x = element_text(angle = 60, hjust = 1)) + 
   labs(x = "\nPeriod", y = "% of citations received\n")+  
@@ -220,29 +222,14 @@ p + geom_smooth(aes(group=CITED), se=F, span=.5, linetype=noself2$linetype, colo
   geom_point(aes(shape = CITED), alpha=7/10)
 ```
 
-Our Replication Work consists of two steps: First, we had a detailed look at the data and the code junk provided from the authors. We really wanted to understand the entire code. That's why we extensively commented the script as a preliminary step. This helped us to gain a better understanding of the procedure and methods used by the authors.
-In a second step, we started to play around with the script and searched for improvements. As this paper only contains descriptive statistics, we mainly focused on their method (1.) and visualization (2.). 
-
-Regarding the method, we noticed that the authors did not develop or refer to any theoretical background. We are not sure if this is compatible with a scientific ethos of an deductive approach. We also realized, that the authors came up with strong normative claims evolved from simple descriptive statistics. Therefore, we critize their aggressive claims which are partly not in line with the use of simple descriptives:
-
-  + Economists mindset about interdisciplinary knowledge (see table 2): Conclusion from a very small sample (only 44 economists sampled) which is not representative.
-
-  + Hierarchy: Not a good measure to proove superiority of economists because indicates nothing related to their claim of economists seeing themselves as superior. This desciptive analysis does not lead to causal explanation of the dependent variable.
-
-  + Reorientation to business and finance is not a good indicator for their main thesis.
-
-  + Conclusion: There are differentiators suitable for their claims: evidence for selfishness, more income, higher self-confidence, strong world-view/norms, unusual power of economists in the real world, successful rational choice theory (adapted from other social sciences), etc. However, the authors did not manage to proove causal inference 
-
 ## **Our Extensions**
-Regarding the visualization, we improved the display of the main figures. This includes changes in the layout of the x- and y-axis, changes with the theme() function the use of the R color brewer package to add new color palettes. We also created and/or modified legends and titles and adjusted the spacing between axis title and x-axis and/or y-axis.
+Regarding the visualization, we improved the display of the main figures. This includes changes in the layout of the x- and y-axis, changes with the theme() function, and the use of R color brewer package to add new color palettes. We also created and/or modified legends and titles and adjusted the spacing between axis title and x-axis and/or y-axis.
 
-Our idea to visually redesign the figures came from the fact that the original plots were held in plain black/grey/white color tones. The original display of the figures did not seem to be very attractive (in our subjective view). In addition, we saw GGplot as a good and feasible starting to start off with R. Moreover, the work with ggplot made us excited as we saw that we can make direct use of the gained knowledge in our studies e.g. use ggplot to visualize graphs in a seminar paper. 
+Our idea to visually redesign the figures came from the fact that the original plots were held in plain black/grey/white color tones. The original display of the figures did not seem to be very attractive (in our subjective view). Also, we saw ggplot as a good and feasible starting to learn data visualization in RStudio. Moreover, the work with ggplot made us excited as we saw that we can make direct use of the gained knowledge in our studies e.g. use ggplot to visualize graphs in a seminar paper. 
 
-Moreover, there was a quite substantial divergence between the display of the figures in the original paper and in R. For instance, the fully replicated Figure 3 had no legend in R even though there was a legend provided in the original paper. We also noticed other slight visual differences e.g. The replicated Figure 4 used different shapes to display observations with the geom_point function that the original paper.
+Moreover, there was a quite substantial divergence between the display of the figures in the original paper and the figures emerged from the provided code junk. For instance, the fully replicated Figure 3 had no legend in R even though there was a legend pictured in the original paper. We also noticed other slight visual differences e.g. the replicated Figure 4 used different shapes to display observations with the geom_point function than in the original paper.
 
-All these factors in combination with the fact that we saw ggplot as a good and useful starting point for our R-career made us confident to take this creative approach and redesign the main figures from a visual perspective. 
-
-Our improvements can be seen in the following section. 
+All these factors in combination with the fact that we saw ggplot as a good and useful starting point made us confident to take this creative approach and redesign the main figures from a visual perspective. Our improvements can be seen in the following section. 
 
 **Extended Figure 2**
 
@@ -448,3 +435,10 @@ theme(legend.title = element_blank()) +
   scale_color_brewer(palette = "Paired")
 
 ```
+
+## **Conclusion**
+
+To conclude, as shown in the previous section, we managed to replicate the main figures of the paper. Apart from the critics, we mentioned before it was possible to understand the approach of the authors due to the replication material they provided. Therefore, the author's effort to ensure reproducibility and transparency is commendable even though not the whole paper is reproducible. One also has to state, that we were positively surprised that the authors responded to our first e-mail to resolve our problems. Even though the authors were not able to solve our problems we appreciated their efforts and good intention to ensure reproducibility. 
+
+In the end, we have to judge the reproducibility of the paper by not sufficient. However, more importantly: we learned and enjoyed the replication work and the corresponding sessions during the replication seminar. It helped us a lot to finally get a grasp on how to apply theoretical methods and we feel much more comfortable now using R for our future studies. 
+

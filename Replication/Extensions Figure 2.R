@@ -21,14 +21,14 @@ p <- ggplot(props.org, aes(x = Rank, y = Freq, fill = Organization))
 p + 
   geom_bar(position="dodge", stat="identity") +  
   #Axis + Title modifications
-  theme(axis.text.x = element_text(size = 10)) + 
-  theme(axis.text.y = element_text(size = 10)) + 
-  theme(axis.title.x = element_text(size = 15)) + 
-  theme(axis.title.y = element_text(size = 15)) +
-  theme(title = element_text(size = 18)) +
-  theme(legend.text = element_text(size = 10, )) +
+  theme(axis.text.x = element_text(size = 8)) + 
+  theme(axis.text.y = element_text(size = 8)) + 
+  theme(axis.title.x = element_text(size = 12)) + 
+  theme(axis.title.y = element_text(size = 12)) +
+  theme(title = element_text(size = 12)) +
+  theme(legend.text = element_text(size = 10)) +
   labs(x = "\nRanking", y = "Council Members in (%)\n\n", title = "Academic Background of Council Members",  
-          subtitle = "(AEA, APSA and ASA)") + 
+       subtitle = "(AEA, APSA and ASA)") + 
   #Background modifications
   theme(panel.background = element_rect(fill='white', color = "grey")) + 
   theme(panel.grid.major = element_line(size = 0.1, colour = "grey")) +

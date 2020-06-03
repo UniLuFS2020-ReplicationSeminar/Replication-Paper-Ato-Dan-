@@ -14,7 +14,6 @@ library("tidyverse")
 library("rio")
 library("reshape")
 library("RColorBrewer")
-library("extrafont")
 ```
 
 # **Replication Report**
@@ -27,9 +26,9 @@ However, we were not able to reproduce all tabes and figures due to missing scri
 Apart from that, the author's comments were sometimes misleading so that we could not assign specific sections of the script to the corresponding tables or figures. E.g. There was an appendix after figure 3 that was already part of figure 4. This led to initial confusion as these additional junks of code substantially changed the looks and results of figure 3.
 
 ## **Analysis of the Paper/Data**
-The paper is called "The Superiority of Economists". We deduced the main thesis: Economists see themselves at the top of social science. The four independent variables include insularity, hierarchy, a reorientation towards business, and other differentiators.
+The paper is called "The Superiority of Economists". We deduced the main thesis: **Economists see themselves at the top of social science**. The four independent variables include insularity, hierarchy, a reorientation towards business, and other differentiators.
 
-Our Replication Work consists of two steps: First, we had a detailed look at the data and the code junk provided by the authors. We wanted to understand the entire code. That's why we extensively commented on the script as a preliminary step. This helped us to gain a better understanding of the procedure and methods used by the authors.
+Our replication work consists of two steps: First, we had a detailed look at the data and the code junk provided by the authors. We wanted to understand the entire code. That's why we extensively commented on the script as a preliminary step. This helped us to gain a better understanding of the procedure and methods used by the authors.
 In a second step, we started to play around with the script and searched for improvements. As this paper only contains descriptive statistics, we mainly focused on their method (1.) and visualization (2.). 
 
 Regarding the method, we noticed that the authors did not develop or refer to any theoretical background. We are not sure if this is compatible with a scientific ethos of a deductive approach. We also realized that the authors came up with strong normative claims that evolved from simple descriptive statistics. Therefore, we criticize their aggressive claims which are partly not in line with the use of simple descriptives. This bad balance between descriptive and normative claims is also a result of the unclear formulation of their main thesis. After reading the paper several times we still asked ourselves: what is the actual purpose of the paper? Is it simply describing the shifting relationships and the general relationship of the different social sciences? But again, how does that fit together with their normative claim that economists see themselves as a superior class. Our main critic of the independent variables are the following:
@@ -37,8 +36,7 @@ Regarding the method, we noticed that the authors did not develop or refer to an
  + Insularity: Sufficient evidence with no interdisciplinary benefit inciting others. 
  + Economists mindset about interdisciplinary knowledge (see table 2): Conclusion from a very small sample (only 44 economists sampled) which 
    is not representative.
- + Hierarchy: Not a good measure to prove the superiority of economists because it indicates nothing related to their claim of economists seeing themselves as superior. This descriptive analysis does not lead to a causal explanation of the dependent variable. Hierarchy itself is a  
-   differentiator but not clear evidence that economists see themselves as a superior class. 
+ + Hierarchy: Not a good measure to prove the superiority of economists because it indicates nothing related to their claim of economists seeing themselves as superior. This descriptive analysis does not lead to a causal explanation of the dependent variable. Hierarchy itself is a differentiator but not clear evidence that economists see themselves as a superior class. 
  + Reorientation to business and finance is not a good indicator of their main thesis.
  + Other differentiators: Some differentiators are suitable for their claims: evidence for selfishness, more income, higher self-confidence, strong world-view/norms, unusual power of economists in the real world, successful rational choice theory (adapted from other social sciences), etc. However, the authors did not manage to prove causal inference for these differentiators.
  
@@ -438,4 +436,6 @@ theme(legend.title = element_blank()) +
 To conclude, as shown in the previous section, we managed to replicate the main figures of the paper. Apart from the critics, we mentioned before it was possible to understand the approach of the authors due to the replication material they provided. Therefore, the author's effort to ensure reproducibility and transparency is commendable even though not the whole paper is reproducible. One also has to state, that we were positively surprised that the authors responded to our first e-mail to resolve our problems. Even though the authors were not able to solve our problems we appreciated their efforts and good intention to ensure reproducibility. 
 
 In the end, we have to judge the reproducibility of the paper by not sufficient. However, more importantly: we learned and enjoyed the replication work and the corresponding sessions during the replication seminar. It helped us a lot to finally get a grasp on how to apply theoretical methods and we feel much more comfortable now using R for our future studies. 
+
+
 
